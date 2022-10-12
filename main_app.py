@@ -109,6 +109,9 @@ def main():
         st.write('You selected:', option_model)
         
         #@st.cache(persist=True)
+        st.write("It would be ideal to have an option for choosing the target variable like below;\
+        but this flexibility also includes scenarios for errors where a target variable, say for instance\
+        a categorical one - has a high level of cardinality that hinders a normal train test split.")
         option_target = st.selectbox('Choose your target variable:',(data.columns))
         st.write('You selected:', option_target)
         
@@ -123,8 +126,16 @@ def main():
            
         X = data_classify.loc[:, data_classify.columns != option_target]
         y = data_classify[option_target]
-        lbl1 = LabelEncoder()
-        lbl1.fit_transform(y)
+        
+        if type(option_target)!=np.numeric:
+            lbl1 = LabelEncoder()
+            y = lbl1.fit_transform(y)
+        else:
+            pass
+            
+        
+        
+        
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = (option_test_split/100), random_state=42)
 
         
