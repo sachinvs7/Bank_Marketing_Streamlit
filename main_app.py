@@ -134,7 +134,7 @@ def main():
         
         lbl0 = LabelEncoder()
         #st.write(obj_list)
-        for x in obj_list:
+        for x in obj_list_new:
             data_classify[x] = lbl0.fit_transform(data_classify[x])
            
         X = data_classify.loc[:, data_classify.columns != option_target]
