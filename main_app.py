@@ -119,27 +119,17 @@ def main():
         st.write('You selected:', option_test_split)
         
         data_classify = data.copy()
-        obj_list = data_classify.loc[:, data_classify.columns != option_target].select_dtypes('object').columns
+        obj_list = data_classify.loc[:, ].select_dtypes('object').columns
         lbl0 = LabelEncoder()
         for x in obj_list:
             data_classify[x] = lbl0.fit_transform(data_classify[x])
            
         X = data_classify.loc[:, data_classify.columns != option_target]
         y = data_classify[option_target]
-        
-        if type(y)!=np.number:
-            lbl1 = LabelEncoder()
-            y = lbl1.fit_transform(y)
-        else:
-            pass
-            
-        
-        
+       
         
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = (option_test_split/100), random_state=42)
 
-        
-        
         
         if option_model == 'LightGBM':
             with st.spinner('Wait for it...'):
