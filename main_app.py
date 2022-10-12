@@ -198,10 +198,8 @@ def main():
             st.subheader("SHAP Summary Plot")
             shap.summary_plot(shap_values, X)
             st.pyplot(plt.show())
-            st.subheader("Relationships Between Variables")
-            st.write("It would be interesting to observe if any two variables have a \
-            particular relationship or correlation between them. Select them below for a scatter plot as a function of clustering; \
-            i.e color hues set by the clusters formed.")
+            st.subheader("SHAP Dependence Plot")
+            st.write("SHAP dependence plots show the effect of a single feature across the whole dataset. They plot a feature’s value vs. the SHAP value of that feature across many samples. The color corresponds to a second feature that may have an interaction effect with the feature in the plot (by default this second feature is chosen automatically). If an interaction effect is present between this second feature and the one that is opted, it will show up as a distinct vertical pattern of coloring.")
             option_shap_var = st.selectbox('Choose variable for dependence plot',(X.columns))
             shap.dependence_plot(option_shap_var, shap_values, X)
             st.pyplot(plt.show())
@@ -214,13 +212,11 @@ def main():
             shap.summary_plot(shap_values, X)
             st.pyplot(plt.show())
             st.subheader("SHAP Dependence Plot")
-            st.write("SHAP dependence plots show the effect of a single feature across the whole dataset. They plot a feature’s value vs. the SHAP value of that feature across many samples. The color corresponds to a second feature that may have an interaction effect with the feature we are plotting (by default this second feature is chosen automatically). If an interaction effect is present between this second feature and the one we are plotting it will show up as a distinct vertical pattern of coloring. ")
+            st.write("SHAP dependence plots show the effect of a single feature across the whole dataset. They plot a feature’s value vs. the SHAP value of that feature across many samples. The color corresponds to a second feature that may have an interaction effect with the feature in the plot (by default this second feature is chosen automatically). If an interaction effect is present between this second feature and the one that is opted, it will show up as a distinct vertical pattern of coloring.")
             option_shap_var = st.selectbox('Choose variable for dependence plot',(X.columns))
             shap.dependence_plot(option_shap_var, shap_values[1], X)
             st.pyplot(plt.show())
         
-        
-
 
     
     
