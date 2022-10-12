@@ -127,7 +127,7 @@ def main():
         X = data_classify.loc[:, data_classify.columns != option_target]
         y = data_classify[option_target]
         
-        if type(option_target)!=np.numeric:
+        if type(y)!=np.number:
             lbl1 = LabelEncoder()
             y = lbl1.fit_transform(y)
         else:
