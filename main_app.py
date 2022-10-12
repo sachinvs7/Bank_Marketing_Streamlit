@@ -101,7 +101,7 @@ def main():
         
         
         
-        option_vald1 = st.selectbox('Attribute 1(x):',(obj_list_new)
+        option_vald1 = st.selectbox('Attribute 1(x):',(obj_list_new))
         option_vald2 = st.selectbox('Attribute 2(y):',(data.columns))
         st.write('You selected:', option_vald1, "and", option_vald2)
         sns.catplot(data=data, x=option_vald1, y=option_vald2, kind="box")
