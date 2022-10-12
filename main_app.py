@@ -111,16 +111,20 @@ def main():
         #@st.cache(persist=True)
         st.write("It would be ideal to have an option for choosing the target variable like below;\
         but this flexibility also includes scenarios for errors where a target variable, say for instance\
-        a categorical one - has a high level of cardinality that hinders a normal train test split.")
-        option_target = st.selectbox('Choose your target variable:',(data.columns))
+        a categorical one that has a high level of cardinality can hinder the display elements.")
+        st.write("It would also be neat to explore model definitions based on target type i.e switching between classification\
+        and regression.")
+        data_classify = data.copy()
+        obj_list = data_classify.loc[:, ].select_dtypes('object').columns
+        option_target = st.selectbox('Choose your target variable:',(obj_list))
         st.write('You selected:', option_target)
         
         option_test_split = st.selectbox('Choose your test split %:',([20, 15, 30]))
         st.write('You selected:', option_test_split)
         
-        data_classify = data.copy()
-        obj_list = data_classify.loc[:, ].select_dtypes('object').columns
+        
         lbl0 = LabelEncoder()
+        st.write(obj_list)
         for x in obj_list:
             data_classify[x] = lbl0.fit_transform(data_classify[x])
            
@@ -128,11 +132,10 @@ def main():
         y = data_classify[option_target]
        
         
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = (option_test_split/100), random_state=42)
-
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=42)
         
-        if option_model == 'LightGBM':
-            with st.spinner('Wait for it...'):
+        
+        with st.spinner('Wait for it...'):
                 @st.experimental_singleton
                 def run_lightgbm():
                     
@@ -145,12 +148,10 @@ def main():
                     shap_values = explainer.shap_values(X)
                     
                     return accuracy_score(y_train,y_train_preds),accuracy_score(y_test,y_test_preds),y_test_preds,shap_values,lgb
-            acc_train, acc_test, y_test_preds, shap_values, model = run_lightgbm()
         
         
         
-        if option_model == 'XGBoost':
-            with st.spinner('Wait for it...'):
+        with st.spinner('Wait for it...'):
                 @st.experimental_singleton
                 def run_xgboost():
                     
@@ -163,7 +164,39 @@ def main():
                     shap_values = explainer.shap_values(X)
                     
                     return accuracy_score(y_train,y_train_preds),accuracy_score(y_test,y_test_preds),y_test_preds,shap_values,xgb
+
+        
+        if option_model == 'LightGBM':
+            acc_train, acc_test, y_test_preds, shap_values, model = run_lightgbm()
+            st.subheader("Feature Importance")
+            lightgbm.plot_importance(model)
+            plt.title("LightGBM Feature Importance (Default)")
+            st.pyplot(plt.show())
+            st.subheader("SHAP Summary Plot")
+            shap.summary_plot(shap_values, X)
+            st.pyplot(plt.show())
+            st.subheader("SHAP Dependence Plot")
+            st.write("SHAP dependence plots show the effect of a single feature across the whole dataset. They plot a feature’s value vs. the SHAP value of that feature across many samples. The color corresponds to a second feature that may have an interaction effect with the feature in the plot (by default this second feature is chosen automatically). If an interaction effect is present between this second feature and the one that is opted, it will show up as a distinct vertical pattern of coloring.")
+            option_shap_var = st.selectbox('Choose variable for dependence plot',(X.columns))
+            shap.dependence_plot(option_shap_var, shap_values[1], X)
+            st.pyplot(plt.show())
+        
+        
+        
+        if option_model == 'XGBoost':
             acc_train, acc_test, y_test_preds, shap_values, model = run_xgboost()
+            st.subheader("Feature Importance")
+            xgboost.plot_importance(model)
+            plt.title("XGBoost Feature Importance (Default)")
+            st.pyplot(plt.show())
+            st.subheader("SHAP Summary Plot")
+            shap.summary_plot(shap_values, X)
+            st.pyplot(plt.show())
+            st.subheader("SHAP Dependence Plot")
+            st.write("SHAP dependence plots show the effect of a single feature across the whole dataset. They plot a feature’s value vs. the SHAP value of that feature across many samples. The color corresponds to a second feature that may have an interaction effect with the feature in the plot (by default this second feature is chosen automatically). If an interaction effect is present between this second feature and the one that is opted, it will show up as a distinct vertical pattern of coloring.")
+            option_shap_var = st.selectbox('Choose variable for dependence plot',(X.columns))
+            shap.dependence_plot(option_shap_var, shap_values, X)
+            st.pyplot(plt.show())
                 
 
         st.success("Fit Complete")
@@ -180,34 +213,7 @@ def main():
         disp = ConfusionMatrixDisplay(confusion_matrix=cm)
         disp.plot()
         st.pyplot(plt.show())
-        st.subheader("Feature Importance")
-        if option_model == 'XGBoost':
-            xgboost.plot_importance(model)
-            plt.title("XGBoost Feature Importance (Default)")
-            st.pyplot(plt.show())
-            st.subheader("SHAP Summary Plot")
-            shap.summary_plot(shap_values, X)
-            st.pyplot(plt.show())
-            st.subheader("SHAP Dependence Plot")
-            st.write("SHAP dependence plots show the effect of a single feature across the whole dataset. They plot a feature’s value vs. the SHAP value of that feature across many samples. The color corresponds to a second feature that may have an interaction effect with the feature in the plot (by default this second feature is chosen automatically). If an interaction effect is present between this second feature and the one that is opted, it will show up as a distinct vertical pattern of coloring.")
-            option_shap_var = st.selectbox('Choose variable for dependence plot',(X.columns))
-            shap.dependence_plot(option_shap_var, shap_values, X)
-            st.pyplot(plt.show())
-            
-        if option_model == 'LightGBM':
-            lightgbm.plot_importance(model)
-            plt.title("LightGBM Feature Importance (Default)")
-            st.pyplot(plt.show())
-            st.subheader("SHAP Summary Plot")
-            shap.summary_plot(shap_values, X)
-            st.pyplot(plt.show())
-            st.subheader("SHAP Dependence Plot")
-            st.write("SHAP dependence plots show the effect of a single feature across the whole dataset. They plot a feature’s value vs. the SHAP value of that feature across many samples. The color corresponds to a second feature that may have an interaction effect with the feature in the plot (by default this second feature is chosen automatically). If an interaction effect is present between this second feature and the one that is opted, it will show up as a distinct vertical pattern of coloring.")
-            option_shap_var = st.selectbox('Choose variable for dependence plot',(X.columns))
-            shap.dependence_plot(option_shap_var, shap_values[1], X)
-            st.pyplot(plt.show())
         
-
     
     
     with tab3:
