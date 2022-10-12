@@ -124,7 +124,7 @@ def main():
         
         
         lbl0 = LabelEncoder()
-        st.write(obj_list)
+        #st.write(obj_list)
         for x in obj_list:
             data_classify[x] = lbl0.fit_transform(data_classify[x])
            
@@ -168,6 +168,19 @@ def main():
         
         if option_model == 'LightGBM':
             acc_train, acc_test, y_test_preds, shap_values, model = run_lightgbm()
+            st.success("Fit Complete")
+            st.header("Results")
+            st.write("Train accuracy:", acc_train*100) 
+            st.write("Test accuracy:", acc_test*100)
+            st.subheader("Classification Report")
+            report = metrics.classification_report(y_test, y_test_preds, output_dict=True)
+            sns.heatmap(pd.DataFrame(report).iloc[:-1, :].T, annot=True)
+            st.pyplot(plt.show())
+            st.subheader("Confusion Matrix")
+            cm = confusion_matrix(y_test, y_test_preds)
+            disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+            disp.plot()
+            st.pyplot(plt.show())
             st.subheader("Feature Importance")
             lightgbm.plot_importance(model)
             plt.title("LightGBM Feature Importance (Default)")
@@ -185,6 +198,19 @@ def main():
         
         if option_model == 'XGBoost':
             acc_train, acc_test, y_test_preds, shap_values, model = run_xgboost()
+            st.success("Fit Complete")
+            st.header("Results")
+            st.write("Train accuracy:", acc_train*100) 
+            st.write("Test accuracy:", acc_test*100)
+            st.subheader("Classification Report")
+            report = metrics.classification_report(y_test, y_test_preds, output_dict=True)
+            sns.heatmap(pd.DataFrame(report).iloc[:-1, :].T, annot=True)
+            st.pyplot(plt.show())
+            st.subheader("Confusion Matrix")
+            cm = confusion_matrix(y_test, y_test_preds)
+            disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+            disp.plot()
+            st.pyplot(plt.show())
             st.subheader("Feature Importance")
             xgboost.plot_importance(model)
             plt.title("XGBoost Feature Importance (Default)")
@@ -198,22 +224,6 @@ def main():
             shap.dependence_plot(option_shap_var, shap_values, X)
             st.pyplot(plt.show())
                 
-
-        st.success("Fit Complete")
-        st.header("Results")
-        st.write("Train accuracy:", acc_train*100) 
-        st.write("Test accuracy:", acc_test*100)
-        st.subheader("Classification Report")
-
-        report = metrics.classification_report(y_test, y_test_preds, output_dict=True)
-        sns.heatmap(pd.DataFrame(report).iloc[:-1, :].T, annot=True)
-        st.pyplot(plt.show())
-        st.subheader("Confusion Matrix")
-        cm = confusion_matrix(y_test, y_test_preds)
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-        disp.plot()
-        st.pyplot(plt.show())
-        
     
     
     with tab3:
