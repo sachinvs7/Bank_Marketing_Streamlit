@@ -90,16 +90,13 @@ def main():
         st.subheader('Attribute Distribution Comparisons')
         st.write("Compare a categorical and numerical attribute via boxplots and values.")
         
+        #Cardinality check
         obj_list = data.loc[:, ].select_dtypes('object').columns
         obj_list_card = []
         for x in obj_list:
             obj_list_card.append(data[x].value_counts().shape[0])
         
         obj_list_new = [x for _, x in sorted(zip(obj_list_card, obj_list))]
-
-        
-        
-        
         
         option_vald1 = st.selectbox('Attribute 1(x):',(obj_list_new))
         option_vald2 = st.selectbox('Attribute 2(y):',(data.columns))
@@ -126,9 +123,9 @@ def main():
         a categorical one that has a high level of cardinality can hinder the display elements.")
         st.write("It would also be neat to explore model definitions based on target type i.e switching between classification\
         and regression.")
-        data_classify = data.copy()
-        obj_list = data_classify.loc[:, ].select_dtypes('object').columns
-        option_target = st.selectbox('Choose your target variable:',(obj_list))
+        #data_classify = data.copy()
+        #obj_list = data_classify.loc[:, ].select_dtypes('object').columns
+        option_target = st.selectbox('Choose your target variable:',(obj_list_new))
         st.write('You selected:', option_target)
         
         option_test_split = st.selectbox('Choose your test split %:',([20, 15, 30]))
@@ -160,7 +157,6 @@ def main():
                     shap_values = explainer.shap_values(X)
                     
                     return accuracy_score(y_train,y_train_preds),accuracy_score(y_test,y_test_preds),y_test_preds,shap_values,lgb
-        
         
         
         with st.spinner('Wait for it...'):
@@ -205,8 +201,7 @@ def main():
             option_shap_var = st.selectbox('Choose variable for dependence plot',(X.columns))
             shap.dependence_plot(option_shap_var, shap_values[1], X)
             st.pyplot(plt.show())
-        
-        
+    
         
         if option_model == 'XGBoost':
             acc_train, acc_test, y_test_preds, shap_values, model = run_xgboost()
@@ -236,8 +231,7 @@ def main():
             shap.dependence_plot(option_shap_var, shap_values, X)
             st.pyplot(plt.show())
                 
-    
-    
+  
     with tab3:
         st.header("Customer Segmentation")
         st.write("-> What is it? Customer segmentation is a strategy used to break up a sizable and diversified customer base into smaller\
