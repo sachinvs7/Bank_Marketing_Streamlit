@@ -124,7 +124,7 @@ def main():
 
         X = data_classify.loc[:, data_classify.columns != option_target]
         y = data_classify[option_target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=42, stratify=y)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=42)
 
         lbl1 = LabelEncoder()
         y_train = lbl1.fit_transform(y_train)
