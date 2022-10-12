@@ -89,7 +89,19 @@ def main():
         
         st.subheader('Attribute Distribution Comparisons')
         st.write("Compare a categorical and numerical attribute via boxplots and values.")
-        option_vald1 = st.selectbox('Attribute 1(x):',(data.columns))
+        
+        obj_list = data.loc[:, ].select_dtypes('object').columns
+        obj_list_card = []
+        for x in obj_list:
+            obj_list_card.append(data[x].value_counts().shape[0])
+        
+        obj_list_new = [x for _, x in sorted(zip(obj_list_card, obj_list))]
+
+        
+        
+        
+        
+        option_vald1 = st.selectbox('Attribute 1(x):',(obj_list_new)
         option_vald2 = st.selectbox('Attribute 2(y):',(data.columns))
         st.write('You selected:', option_vald1, "and", option_vald2)
         sns.catplot(data=data, x=option_vald1, y=option_vald2, kind="box")
