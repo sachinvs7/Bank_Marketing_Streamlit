@@ -123,7 +123,7 @@ def main():
         a categorical one that has a high level of cardinality can hinder the display elements.")
         st.write("It would also be neat to explore model definitions based on target type i.e switching between classification\
         and regression.")
-        #data_classify = data.copy()
+        data_classify = data.copy()
         #obj_list = data_classify.loc[:, ].select_dtypes('object').columns
         option_target = st.selectbox('Choose your target variable:',(obj_list_new))
         st.write('You selected:', option_target)
