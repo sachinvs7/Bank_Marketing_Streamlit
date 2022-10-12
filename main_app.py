@@ -41,6 +41,7 @@ def main():
         col1, col2 = st.columns(2)
     
         with col1:
+            st.set_option('deprecation.showPyplotGlobalUse', False)
             st.markdown("Correlation Heatmap:")
             f, ax = plt.subplots(figsize=(10, 8))
             corr = data.corr()
@@ -116,7 +117,7 @@ def main():
         
         data_classify = data.copy()
         obj_list = data_classify.loc[:, data_classify.columns != option_target].select_dtypes('object').columns
-        lbl0 = preprocessing.LabelEncoder()
+        lbl0 = LabelEncoder()
         for x in obj_list:
             data_classify[x] = lbl0.fit_transform(data_classify[x])
 
@@ -125,7 +126,7 @@ def main():
         y = data_classify[option_target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=42, stratify=y)
 
-        lbl1 = preprocessing.LabelEncoder()
+        lbl1 = LabelEncoder()
         y_train = lbl1.fit_transform(y_train)
         y_test = lbl1.transform(y_test)
         
