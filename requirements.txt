@@ -1,0 +1,12 @@
+numba==0.58.0
+streamlit==1.24.1
+pandas==1.4.3
+numpy==1.25.0
+scikit-learn==1.1.2
+xgboost==1.6.2
+lightgbm==3.3.3
+IPython==8.4.0
+shap==0.43.0
+matplotlib==3.5.3
+seaborn==0.11.2
+kmodes==0.12.1
