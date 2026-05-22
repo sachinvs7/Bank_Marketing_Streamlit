@@ -36,7 +36,7 @@ def main():
         col1, col2 = st.columns(2)
     
         with col1:
-            st.set_option('deprecation.showPyplotGlobalUse', False)
+            #st.set_option('deprecation.showPyplotGlobalUse', False)
             st.markdown("Correlation heatmap:")
             f, ax = plt.subplots(figsize=(10, 8))
             corr = data.corr()
@@ -49,7 +49,7 @@ def main():
             
 
         with col2:
-            st.set_option('deprecation.showPyplotGlobalUse', False)
+            #st.set_option('deprecation.showPyplotGlobalUse', False)
             st.markdown("Dataset type distribution:")
             plt.figure(figsize=(7, 5.85))
             ax = data.dtypes.to_frame().value_counts().plot(kind='bar', rot=0)
