@@ -39,7 +39,7 @@ def main():
             #st.set_option('deprecation.showPyplotGlobalUse', False)
             st.markdown("Correlation heatmap:")
             f, ax = plt.subplots(figsize=(10, 8))
-            corr = data.corr()
+            corr = data.corr(numeric_only=True)
             sns.heatmap(corr, mask=np.zeros_like(corr, dtype=bool), cmap=sns.diverging_palette(220, 10, as_cmap=True),
                         square=True, ax=ax)
             st.pyplot(plt.show())
