@@ -16,7 +16,7 @@ import shap
 import matplotlib.pylab as plt
 import seaborn as sns
 
-shap.initjs()
+#shap.initjs()
 
 def main():
     
